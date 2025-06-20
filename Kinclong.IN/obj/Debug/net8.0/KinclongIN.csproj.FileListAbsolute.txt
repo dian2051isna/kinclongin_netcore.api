@@ -55,3 +55,4 @@ C:\Users\Asus\source\repos\Kinclong.IN\Kinclong.IN\obj\Debug\net8.0\refint\Kincl
 C:\Users\Asus\source\repos\Kinclong.IN\Kinclong.IN\obj\Debug\net8.0\KinclongIN.pdb
 C:\Users\Asus\source\repos\Kinclong.IN\Kinclong.IN\obj\Debug\net8.0\KinclongIN.genruntimeconfig.cache
 C:\Users\Asus\source\repos\Kinclong.IN\Kinclong.IN\obj\Debug\net8.0\ref\KinclongIN.dll
+C:\Users\Asus\source\repos\Kinclong.IN\Kinclong.IN\obj\Debug\net8.0\KinclongIN.sourcelink.json

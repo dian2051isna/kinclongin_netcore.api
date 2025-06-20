@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KinclongIN")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f3d66a4ff58854c955b089d0c941a42c06ba7c36")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+05dd0f9efb1feba9266c6c26725d50baaa98a19c")]
 [assembly: System.Reflection.AssemblyProductAttribute("KinclongIN")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KinclongIN")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
