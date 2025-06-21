@@ -11,28 +11,24 @@ namespace KinclongIN.Controllers
     [Route("api/[controller]")]
     public class BookingController : Controller
     {
-        private string __constr;
-        public BookingController(IConfiguration configuration)
+        private readonly BookingContext _context;
+
+        public BookingController(BookingContext context)
         {
-            __constr = configuration.GetConnectionString("WebApiDatabase");
+            _context = context;
         }
 
         [HttpGet]
         public ActionResult<List<Bookings>> ListBooking()
         {
-            //BookingContext context = new BookingContext(this.__constr);
-            //var list = context.ListBookings();
-            //return Ok(list);
-
-            BookingContext context = new BookingContext(this.__constr);
-            var list = context.ListBookings();
+            var list = _context.ListBookings();
 
             var dtoList = list.Select(b => new BookingResponseDTO
             {
                 id_booking = b.id_booking,
                 booking_date = b.booking_date,
                 booking_status = b.booking_status,
-                idUser = b.idUser
+                idUser = b.IdUser
             }).ToList();
 
             return Ok(dtoList);
@@ -41,8 +37,7 @@ namespace KinclongIN.Controllers
         [HttpGet("{id}")]
         public ActionResult<Bookings> GetBookingById(int id)
         {
-            BookingContext context = new BookingContext(this.__constr);
-            var booking = context.GetBookingById(id);
+            var booking = _context.GetBookingById(id);
 
             if (booking == null)
             {
@@ -67,8 +62,7 @@ namespace KinclongIN.Controllers
                 updated_at = DateTime.Now
             };
 
-            BookingContext context = new BookingContext(this.__constr);
-            bool result = context.AddBooking(newBooking);
+            bool result = _context.AddBooking(newBooking);
 
             if (result)
                 return Ok("Booking berhasil ditambahkan.");
@@ -79,8 +73,7 @@ namespace KinclongIN.Controllers
         [HttpPut("{id}/status")]
         public IActionResult UpdateBookingStatus(int id, [FromBody] string status)
         {
-            BookingContext context = new BookingContext(this.__constr);
-            bool result = context.UpdateBookingStatus(id, status);
+            bool result = _context.UpdateBookingStatus(id, status);
 
             if (result)
                 return Ok($"Status booking ID {id} berhasil diperbarui menjadi '{status}'.");
@@ -91,8 +84,7 @@ namespace KinclongIN.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteBooking(int id)
         {
-            BookingContext context = new BookingContext(this.__constr);
-            bool result = context.DeleteBooking(id);
+            bool result = _context.DeleteBooking(id);
 
             if (result)
                 return Ok($"Booking ID {id} berhasil dihapus.");

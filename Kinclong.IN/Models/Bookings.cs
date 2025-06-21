@@ -1,4 +1,7 @@
-﻿namespace Kinclong.IN.Models
+﻿using Kinclong.IN.Models;
+using KinclongIN.Models;
+
+namespace KinclongIN.Models
 {
     public class Bookings
     {

@@ -1,4 +1,4 @@
-﻿namespace Kinclong.IN.Models
+﻿namespace KinclongIN.Models
 {
     public class StatusOrder
     {

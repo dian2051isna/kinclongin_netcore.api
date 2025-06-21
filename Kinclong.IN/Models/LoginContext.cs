@@ -3,8 +3,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using KinclongIN.Helpers;
 using KinclongIN.Models;
+using KinclongIN.DTO;
 using Npgsql;
 
 
@@ -14,6 +14,8 @@ namespace KinclongIN.Models
     {
         private string __constr;
         private string __ErrorMsg;
+        public string ErrorMessage => __ErrorMsg;
+
         public LoginContext(string pConstr)
         {
             __constr = pConstr;
@@ -53,6 +55,48 @@ namespace KinclongIN.Models
                 this.__ErrorMsg = ex.Message;
             }
             return list1;
+        }
+
+        public bool Register(RegisterDTO registerDto, IConfiguration config)
+        {
+            bool isRegistered = false;
+            string checkUserQuery = "SELECT COUNT(*) FROM person WHERE email = @Email";
+            string insertPersonQuery = @"INSERT INTO person (email, password) 
+                                         VALUES (@Email, @Password) RETURNING id_person";
+
+            sqlDBHelper db = new sqlDBHelper(this.__constr);
+            try
+            {
+                // Check if user already exists
+                NpgsqlCommand checkCmd = db.getNpgsqlCommand(checkUserQuery);
+                checkCmd.Parameters.AddWithValue("@Email", registerDto.Email);
+                int userCount = Convert.ToInt32(checkCmd.ExecuteScalar());
+                checkCmd.Dispose();
+
+                if (userCount > 0)
+                {
+                    db.closeConnection();
+                    return false; // User already exists
+                }
+
+                // Insert new user (only email and password)
+                NpgsqlCommand insertCmd = db.getNpgsqlCommand(insertPersonQuery);
+                insertCmd.Parameters.AddWithValue("@Email", registerDto.Email);
+                insertCmd.Parameters.AddWithValue("@Password", registerDto.Password);
+                insertCmd.ExecuteScalar();
+                insertCmd.Dispose();
+
+                db.closeConnection();
+                isRegistered = true;
+            }
+            catch (Exception ex)
+            {
+                this.__ErrorMsg = ex.Message;
+                Console.WriteLine("Register ERROR: " + ex.Message); // Untuk debug
+                db.closeConnection();
+                isRegistered = false;
+            }
+            return isRegistered;
         }
 
         private string GenerateJwtToken(string username, IConfiguration pConfig) // Fixing the method signature

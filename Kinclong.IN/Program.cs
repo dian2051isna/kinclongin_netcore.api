@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using KinclongIN.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +63,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
         };
     });
+
+builder.Services.AddScoped<BookingContext>();
+builder.Services.AddScoped<OrderContext>();
+builder.Services.AddScoped<ReviewContext>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

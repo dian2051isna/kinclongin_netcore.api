@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Kinclong.IN.Models
+namespace KinclongIN.Models
 {
     public class TransaksiPembayaran
     {

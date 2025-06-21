@@ -11,10 +11,11 @@ namespace KinclongIN.Models
         private string __constr;
         private string __ErrorMsg;
 
-        public BookingContext(string pConstr)
+        public BookingContext(IConfiguration configuration)
         {
-            __constr = pConstr;
+            __constr = configuration.GetConnectionString("WebApiDatabase");
         }
+
 
         // Mendapatkan semua bookings
         public List<Bookings> ListBookings()
