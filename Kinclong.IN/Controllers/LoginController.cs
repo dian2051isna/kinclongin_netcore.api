@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using KinclongIN.Models;
 using KinclongIN.DTO;
+using KinclongIN.Helpers;
 
 namespace KinclongIN.Controllers
 {
@@ -20,12 +21,33 @@ namespace KinclongIN.Controllers
             return View();
         }
         [HttpPost("api/Login")]
-        public IEnumerable<Login> LoginUser(string namaUser, string password)
+        public IActionResult Login([FromBody] LoginDTO loginData)
         {
-            LoginContext login = new LoginContext(__constr);
-            List<Login> listlogin = login.Autentifikasi(namaUser, password, __config);
-            return listlogin.ToArray();
+            var context = new LoginContext(__constr);
+            var user = context.Autentifikasi(loginData.Email, loginData.Password, __config);
+
+            if (user == null)
+            {
+                return Unauthorized(new { message = "Email atau password salah" });
+            }
+
+            var jwtHelper = new JwtHelper(__config);
+            var token = jwtHelper.GenerateToken(user);
+
+            return Ok(new
+            {
+                token,
+                user = new
+                {
+                    id = user.id_person,
+                    nama = user.nama,
+                    email = user.email,
+                    peran = user.nama_peran
+                }
+            });
         }
+
+
         [HttpPost("api/Register")]
         public IActionResult RegisterUser([FromBody] RegisterDTO registerDto)
         {

@@ -180,51 +180,28 @@
         "tags": [
           "Login"
         ],
-        "parameters": [
-          {
-            "name": "namaUser",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "password",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Login"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Login"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Login"
-                  }
-                }
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDTO"
               }
             }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -414,38 +391,14 @@
         },
         "additionalProperties": false
       },
-      "Login": {
+      "LoginDTO": {
         "type": "object",
         "properties": {
-          "id_person": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "nama": {
-            "type": "string",
-            "nullable": true
-          },
-          "alamat": {
-            "type": "string",
-            "nullable": true
-          },
           "email": {
             "type": "string",
             "nullable": true
           },
           "password": {
-            "type": "string",
-            "nullable": true
-          },
-          "id_peran": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "nama_peran": {
-            "type": "string",
-            "nullable": true
-          },
-          "token": {
             "type": "string",
             "nullable": true
           }

@@ -20,33 +20,40 @@ namespace KinclongIN.Models
         {
             __constr = pConstr;
         }
-        public List<Login> Autentifikasi(string p_username, string p_password, IConfiguration p_config)
+        public Login Autentifikasi(string p_email, string p_password, IConfiguration p_config)
         {
-            List<Login> list1 = new List<Login>();
-            string query = string.Format(@"SELECT ps.id_person, ps.nama, ps.alamat,
-                            ps.email, pp.id_peran, p.nama_peran
-                            FROM person ps
-                            INNER JOIN peran_person pp ON ps.id_person = pp.id_person
-                            INNER JOIN peran p ON pp.id_peran = p.id_peran
-                            WHERE ps.email = '{0}' AND ps.password = '{1}'", p_username, p_password);
+            Login login = null;
+            string query = @"SELECT ps.id_person, ps.nama, ps.alamat,
+                    ps.email, pp.id_peran, p.nama_peran, ps.password
+                    FROM person ps
+                    INNER JOIN peran_person pp ON ps.id_person = pp.id_person
+                    INNER JOIN peran p ON pp.id_peran = p.id_peran
+                    WHERE ps.email = @Email";
+
             sqlDBHelper db = new sqlDBHelper(this.__constr);
             try
             {
                 NpgsqlCommand cmd = db.getNpgsqlCommand(query);
+                cmd.Parameters.AddWithValue("@Email", p_email);
                 NpgsqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
+
+                if (reader.Read())
                 {
-                    list1.Add(new Login()
+                    var storedPassword = reader["password"].ToString();
+                    if (storedPassword == p_password) 
                     {
-                        id_person = int.Parse(reader["id_person"].ToString()),
-                        nama = reader["nama"].ToString(),
-                        alamat = reader["alamat"].ToString(),
-                        email = reader["email"].ToString(),
-                        id_peran = int.Parse(reader["id_peran"].ToString()),
-                        nama_peran = reader["nama_peran"].ToString(),
-                        token = GenerateJwtToken(p_username, p_config) // Fixing the method call
-                    });
+                        login = new Login()
+                        {
+                            id_person = int.Parse(reader["id_person"].ToString()),
+                            nama = reader["nama"].ToString(),
+                            alamat = reader["alamat"].ToString(),
+                            email = reader["email"].ToString(),
+                            id_peran = int.Parse(reader["id_peran"].ToString()),
+                            nama_peran = reader["nama_peran"].ToString(),
+                        };
+                    }
                 }
+
                 cmd.Dispose();
                 db.closeConnection();
             }
@@ -54,8 +61,10 @@ namespace KinclongIN.Models
             {
                 this.__ErrorMsg = ex.Message;
             }
-            return list1;
+
+            return login;
         }
+
 
         public bool Register(RegisterDTO registerDto, IConfiguration config)
         {
