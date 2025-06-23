@@ -2,8 +2,8 @@
 {
     public class ReviewDTO
     {
-        public int id_review { get; set; }
-        public int rating { get; set; }
-        public string comment { get; set; }
+        public int IdOrder { get; set; }
+        public int Rating { get; set; }
+        public string Comment { get; set; }
     }
 }

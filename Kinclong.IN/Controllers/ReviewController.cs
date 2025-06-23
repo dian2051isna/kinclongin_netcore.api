@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using KinclongIN.Models;
 using System.Security.Claims;
+using KinclongIN.DTO;
 
 namespace KinclongIN.Controllers
 {
@@ -19,12 +20,18 @@ namespace KinclongIN.Controllers
         // POST: /api/review
         [HttpPost]
         [Authorize]
-        public IActionResult AddReview([FromBody] Review review)
+        public IActionResult AddReview([FromBody] ReviewDTO reviewDTO)
         {
-            // Ambil id_user dari token JWT
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            review.IdUser = userId;
+            var review = new Review
+            {
+                IdUser = userId,
+                IdOrder = reviewDTO.IdOrder,
+                Rating = reviewDTO.Rating,
+                Comment = reviewDTO.Comment,
+                CreatedAt = DateTime.UtcNow
+            };
 
             var success = _context.AddReview(review);
 
@@ -33,6 +40,7 @@ namespace KinclongIN.Controllers
             else
                 return BadRequest("Gagal menambahkan review.");
         }
+
 
         // DELETE: /api/review/{id}
         [HttpDelete("{id}")]

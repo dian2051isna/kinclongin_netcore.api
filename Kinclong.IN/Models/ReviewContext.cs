@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using Npgsql;
 using KinclongIN.Models;
+using KinclongIN.DTO;
 
 namespace KinclongIN.Models
 {
